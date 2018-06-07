@@ -31,3 +31,6 @@ export const apiGetMyOrder = (ajaxParams) => wxRequest(API_PATH + `/order/my-ord
 
 //分期支付（可多选）
 export const apiCourseDetailPay = (ajaxParams) => wxRequest(API_PATH + '/order/pay-stages', ajaxParams, 'POST')
+
+//实名认证（保存证件照地址）
+export const apiUploadCard = (ajaxParams) => wxRequest(API_PATH + '/order/upload-pic', ajaxParams, 'POST')

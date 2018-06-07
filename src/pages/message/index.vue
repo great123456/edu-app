@@ -56,7 +56,7 @@ export default {
        if(res.code == 200){
          this.name = res.data.name
          this.phone = res.data.phone
-         this.card = res.data.card
+         this.card = res.data.id_card_no
          this.address = res.data.address
        }
      })

@@ -27,7 +27,7 @@
 
 <script>
 import wxShare from '@/mixins/wx-share'
-import { apiUploadImg } from '@/service/my'
+import { apiUploadImg,apiUploadCard } from '@/service/my'
 export default {
   mixins: [wxShare],
   data () {
@@ -35,7 +35,11 @@ export default {
      imgurl: '',
      imgurl2:'',
      imgurl3:'',
-     imgurl5:''
+     imgurl5:'',
+     card_face: '',
+     card_back: '',
+     cert_pic: '',
+     graduation_pic: ''
     }
   },
   components: {
@@ -72,6 +76,7 @@ export default {
             },
             success: function(res){
               console.log('upload',res);
+              self.card_face = JSON.parse(res.data).data.url
             }
           })
         }
@@ -98,6 +103,7 @@ export default {
             },
             success: function(res){
               console.log('upload2',res);
+              self.card_back = JSON.parse(res.data).data.url
             }
           })
         }
@@ -124,6 +130,7 @@ export default {
             },
             success: function(res){
               console.log('upload3',res);
+              self.cert_pic = JSON.parse(res.data).data.url
             }
           })
         }
@@ -150,13 +157,15 @@ export default {
             },
             success: function(res){
               console.log('upload5',res);
+              self.graduation_pic = JSON.parse(res.data).data.url
+              console.log('graduation_pic',self.graduation_pic)
             }
           })
         }
       })
     },
     editMessagePage(){
-      if(this.imgurl ==''||this.imgurl2 == ''||this.imgurl3 == ''){
+      if(this.card_face ==''||this.card_back == ''||this.cert_pic == ''){
         wx.showToast({
             title: '还有证件没上传',
             icon: 'none',
@@ -164,14 +173,31 @@ export default {
         })
         return
       }
-      wx.setStorageSync('card', true)
-      wx.showToast({
-          title: '保存成功',
-          icon: 'success',
-          duration: 2000
+      apiUploadCard({
+        id_card_face: this.card_face,
+        id_card_back: this.card_back,
+        cert_pic: this.cert_pic,
+        graduation_pic: this.graduation_pic
       })
-      wx.navigateBack({
-        delta: 1
+      .then((res)=>{
+        console.log('card-res',res)
+        if(res.code == 200){
+          wx.setStorageSync('card', true)
+          wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 2000
+          })
+          wx.navigateBack({
+            delta: 1
+          })
+        }else{
+          wx.showToast({
+              title: '实名认证失败',
+              icon: 'none',
+              duration: 2000
+          })
+        }
       })
     }
   }
