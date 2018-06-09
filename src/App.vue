@@ -1,7 +1,7 @@
 <script>
   export default {
     mounted() {
-
+      console.log('app create')
     }
   }
 </script>
